@@ -7,7 +7,7 @@ import {
   faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { Dispatch, useEffect, useState } from "react";
+import React, { Dispatch, useContext, useEffect, useState } from "react";
 import { UserInput } from "./UserInput";
 import { InvoiceItemInput } from "./InvoiceItemInput";
 import { InvoiceItemData } from "../Classes/InvoiceItemData";
@@ -16,6 +16,7 @@ import { PaymentTerms } from "./SmallComponents/PaymentTerms";
 import api from "../../api";
 import { invoiceType } from "../Classes/InvoiceType";
 import { AddingInvoiceType } from "../Classes/AddingInvoiceType";
+import {MainContext} from "./MainPage";
 
 type AddingInvoiceProps = {
   setAddState: Function;
@@ -51,6 +52,8 @@ export const AddingInvoice = (props: AddingInvoiceProps) => {
   const [datePickerActive, setDatePickerActive] = useState(false);
   //payment terms
   const [selectPaymentTermsActive, setSelectPaymentTermsActive] = useState(false)
+
+  const {getInvoices} = useContext(MainContext) || {};
 
   const months: { days: number, month: string }[] = [
     { days: 31, month: 'Jan'},
@@ -135,7 +138,15 @@ export const AddingInvoice = (props: AddingInvoiceProps) => {
 
     console.log(newInvoice);
 
-    api.post("api/invoices/", newInvoice)
+    api.post("api/invoices/", newInvoice).then((res) => {
+      console.log(res.data);
+      alert("Invoice added successfully");
+      getInvoices && getInvoices();
+      props.setAddState(false);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
   const setPaymentDueDate = () => {
@@ -169,7 +180,8 @@ export const AddingInvoice = (props: AddingInvoiceProps) => {
 
   useEffect(() => {
     if(invoiceDateDay != undefined && invoiceDateMonth != undefined && invoiceDateYear != undefined){ 
-      setInvoiceDate(`${invoiceDateDay}-${invoiceDateMonth}-${invoiceDateYear}`);
+      console.log(invoiceDateMonth)
+      setInvoiceDate(`${invoiceDateDay}-${months[invoiceDateMonth].month}-${invoiceDateYear}`);
     }
     setPaymentDueDate();
   }, [paymentTerms, invoiceDateDay, invoiceDateMonth, invoiceDateYear])

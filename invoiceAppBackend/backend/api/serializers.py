@@ -31,7 +31,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Invoice
-        fields = ['paymentDue', 'clientName', 'total', 'status', 'createdAt', 'paymentTerms', 'description', 'clientEmail', 'senderAddress', 'clientAddress', 'items']
+        fields = ['id', 'paymentDue', 'clientName', 'total', 'status', 'createdAt', 'paymentTerms', 'description', 'clientEmail', 'senderAddress', 'clientAddress', 'items']
 
     def create(self, validated_data):
         sender_address_data = validated_data.pop('senderAddress')

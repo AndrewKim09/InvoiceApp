@@ -44,9 +44,7 @@ export const ClickedInvoiceExpand = (invoice: ClickedInvoiceExpandProps) => {
       "Nov",
       "Dec",
     ];
-    var dateString = `${dateArray[2]} ${months[parseInt(dateArray[1])]} ${
-      dateArray[0]
-    }`;
+    var dateString = `${dateArray[2]} ${dateArray[1]} ${dateArray[0]}`;
     return dateString;
   };
   const calculateTotal = (
@@ -71,7 +69,7 @@ export const ClickedInvoiceExpand = (invoice: ClickedInvoiceExpandProps) => {
         />
       )}
       {deleteState && <div className="fixed top-0 bottom-0 left-0 right-0 z-20 bg-black opacity-20"/>}
-      {deleteState && <DeletePopUp setDeleteState={setDeleteState}/>}
+      {deleteState && <DeletePopUp idToDelete={invoice.invoice.id} setDeleteState={setDeleteState}/>}
       
       <div
         className={`flex flex-col px-[1.5rem] w-[100%] md:px-[2.5rem] ${

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext} from "react";
 import { NavBar } from "./NavBar";
 import { InvoiceBar } from "./InvoiceBar";
 import { Invoices } from "./Invoices";
@@ -7,15 +7,31 @@ import { invoiceType } from "../Classes/InvoiceType";
 import { ClickedInvoiceExpand } from "./ClickedInvoiceExpand";
 import data from "../../assets/data.json";
 import api from "../../api";
+
+type MainContextType = {
+  getInvoices: Function
+}
+
+const MainContext = createContext<null | MainContextType>(null);
+
 function App() {
   const [addState, setAddState] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [clickedInvoice, setClickedInvoice] = useState<invoiceType | null>(
     null
   );
+  const [apiData, setApiData] = useState<invoiceType[]>([]);
   const [fetchedData, setFetchedData] = useState(data);
   const [editState, setEditState] = useState(false);
   const [addStateHeight, setAddStateHeight] = useState("h-[1655.5px]");
+
+  const MainProvider = ({ children }: { children: React.ReactNode }) => {
+    return (
+      <MainContext.Provider value={{ getInvoices }}>
+        {children}
+      </MainContext.Provider>
+    );
+  }
 
   const toggleNightMode = () => {
     document.documentElement.classList.toggle("dark");
@@ -29,6 +45,7 @@ function App() {
   const getInvoices = async () => {
     api.get("api/invoices/").then((res) => {
       console.log(res.data);
+      setApiData(res.data);
     })
     .catch((error) => {
       console.log(error);
@@ -42,6 +59,7 @@ function App() {
   }, []);
 
   return (
+    <MainProvider>
     <div className="flex flex-col xl:flex-row min-h-[100vh] h-auto App ">
       <NavBar toggleNightMode={toggleNightMode} darkMode={darkMode} />
       <div
@@ -71,7 +89,7 @@ function App() {
                 <Invoices
                   setAddState={setAddState}
                   setClickedInvoice={setClickedInvoice}
-                  fetchedData={fetchedData}
+                  fetchedData={apiData}
                 />
               </div>
             </>
@@ -79,7 +97,9 @@ function App() {
         </div>
       </div>
     </div>
+    </MainProvider>
   );
 }
 
-export default App;
+export default App;  export type { MainContextType }; export { MainContext };
+
