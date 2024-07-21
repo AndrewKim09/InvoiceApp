@@ -176,8 +176,8 @@ export const AddingInvoice = (props: AddingInvoiceProps) => {
 
 
   return (
-    <div className="pt-[33px] px-[1.5rem] flex flex-col w-[100%] z-20 bg-white absolute rounded-r-2xl md:w-[80.2vw] xl:w-auto xl:left-0 xl:top-0 xl:right-[47.5rem]">
-      <div className="flex flex-col w-[100%] px-[24px] md:px-[3.5rem]">
+    <div className="pt-[33px] px-[1.5rem] md flex flex-col w-[100%] z-20 bg-white absolute md:px-[3.5rem] rounded-r-2xl md:w-[80.2vw] xl:w-auto xl:left-0 xl:top-0 xl:right-[47.5rem] xl:min-w-[603px]">
+      <div className="flex flex-col w-[100%] px-[24px] md:px-0">
         <div className="flex items-center">
           <FontAwesomeIcon
             icon={faArrowLeft}
@@ -261,18 +261,23 @@ export const AddingInvoice = (props: AddingInvoiceProps) => {
         />
       </div>
 
-      <div className="w-[100] h-[91px] pr-[1.5rem] flex justify-end items-center mt-[5.5rem] shadow-[0_-15px_30px_rgba(0,0,0,0.1)] mx-[-1.5rem]  md:shadow-none">
+      <div className="w-[100] h-[91px] px-[1.5rem] flex justify-between items-center mt-[5.5rem] shadow-[0_-15px_30px_rgba(0,0,0,0.1)] mx-[-1.5rem]  md:shadow-none">
         <button className="rounded-[4000px] py-[1rem] bg-[#F9FAFE] text-greyBlue font-bold text-[15px] tracking-[-0.25px] px-[1.5rem]" onClick ={() => {props.setAddState(false)}}>
           Cancel
         </button>
-        <button
-          className="rounded-[4000px] py-[1rem] bg-purple text-white font-bold text-[15px] tracking-[-0.25px] px-[1.5rem] ml-[1rem]"
-          onClick={() => {
-            onSaveChanges();
-          }}
-        >
-          Save Changes
-        </button>
+        <span>
+          <button className="rounded-[4000px] py-[1rem] font-bold text-[15px] tracking-[-0.25px] px-[1.5rem] ml-[1rem] text-grey bg-black1">
+            Save as Draft
+          </button>
+          <button
+            className="rounded-[4000px] py-[1rem] bg-purple text-white font-bold text-[15px] tracking-[-0.25px] px-[1.5rem] ml-[1rem]"
+            onClick={() => {
+              onSaveChanges();
+            }}
+          >
+            Save & send
+          </button>
+        </span>
       </div>
     </div>
   );

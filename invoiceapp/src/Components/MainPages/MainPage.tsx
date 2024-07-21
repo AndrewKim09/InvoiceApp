@@ -46,7 +46,7 @@ function App() {
       <NavBar toggleNightMode={toggleNightMode} darkMode={darkMode} />
       <div
         className={`w-[100%] h-[100%] grow xl:grow-0 xl:px-0 xl:w-[100%] xl:pt-[4.0625rem] xl:pb-[3.375rem] relative ${
-          addState || editState ? "h-[1936.5px] md:h-[1706.5px]" : 'max-h-[100%]'
+          addState || editState ? "h-[1936.5px] md:h-[1605.5px]" : 'max-h-[100%]'
         }`}
       >
         <div
