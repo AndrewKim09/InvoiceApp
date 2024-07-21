@@ -46,7 +46,7 @@ export const Invoices = (props: invoicesProps) => {
       props.fetchedData.map((invoice: Invoice, key: number) => {
           return (
             <div key={key} className='w-[100%] h-[134px] bg-white mt-[1rem] rounded-xl px-[1.5rem] pb-[1.375rem] pt-[1.5625rem] flex flex-col flex-wrap cursor-pointer justify-start md:grid md:grid-cols-[87px_1fr_1fr_1fr_1fr_24px] md:items-center md:justify-between md:py-[1rem] md:h-[72px] md:shadow-sm' onClick={() => {onExpand(invoice)}}>
-                <p className='text-[15px] font-bold tracking-[-0.25px] h-[15px] leading-[15px]'><span className='text-grey '>#</span>{invoice.id.toString()}</p>
+                <p className='text-[15px] font-bold tracking-[-0.25px] h-[15px] leading-[15px]'><span className='text-grey '>#</span>{invoice.id}</p>
                 <p className='text-[13px] text-[#858BB2] tracking-[-0.1px] order-4 self-end justify-self-between h-[15px] md:self-center md:order-3'>{invoice.clientName}</p>
 
                 <p className='text-[13px] text-[#858BB2] tracking-[-0.1px] mt-[1.5rem] h-[15px] md:mt-0 '>Due {invoice.paymentDue}</p>

@@ -15,6 +15,8 @@ import { invoiceType } from "../Classes/InvoiceType";
 import { DatePicker } from "./SmallComponents/DatePicker";
 import { PaymentTerms } from "./SmallComponents/PaymentTerms";
 import { setConstantValue } from "typescript";
+import { AddingInvoiceType } from "../Classes/AddingInvoiceType";
+import api from "../../api";
 
 type AddingInvoiceProps = {
   setEditState: React.Dispatch<React.SetStateAction<boolean>>;
@@ -137,6 +139,15 @@ export const EditingInvoice = (props: AddingInvoiceProps) => {
     }
 
     console.log("All fields filled");
+    const newInvoice = new AddingInvoiceType(paymentDue, clientName, total, "pending", invoiceDate, paymentTerms || 0, projectDescription, clientEmail, { street: streetAddress, city: city, postCode: postCode, country: country }, { street: clientStreetAddress, city: clientCity, postCode: clientPostCode, country: clientCountry }, invoiceItems)
+    api.put(`api/invoices/${props.invoice.id}/`, newInvoice).then((res) => {
+      console.log(res.data);
+      alert("Invoice updated successfully");
+      props.setEditState(false);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   };
 
   const TurnOffSelectPaymentTerms = () => {
