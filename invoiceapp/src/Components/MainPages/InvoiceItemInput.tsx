@@ -118,7 +118,7 @@ export const InvoiceItemInput = (props: InvoiceItemInputProps) => {
                     {index == 0 && <p className='hidden md:block text-[13px] tracking-[-0.1px] mt-[1.5rem]'>Total</p>}
                     <p className='mb-[9px] text-[13px] tracking-[-0.1px] mt-[1.5rem] md:hidden'>Total</p>
                     <input
-                      className='w-[100%] h-[48px] rounded-md text-[15px] tracking-[-0.25px] font-bold md:bg-white px'
+                      className='w-[100%] h-[48px] rounded-md text-[15px] tracking-[-0.25px] font-bold md:bg-white dark:bg-inherit dark:text-lightGrey'
                       value={Number(item.quantity) * Number(item.price)}
                       disabled
                     />
@@ -136,7 +136,7 @@ export const InvoiceItemInput = (props: InvoiceItemInputProps) => {
       )}
 
       <button
-        className='bg-[#F9FAFE] text-greyBlue font-bold text-[15px] tracking-[-0.25px] w-[100%] min-h-[48px] rounded-[5000px]'
+        className='bg-[#F9FAFE] text-greyBlue font-bold text-[15px] tracking-[-0.25px] w-[100%] min-h-[48px] rounded-[5000px] dark:bg-black3 dark:text-lightGrey'
         onClick={handleAddNewItem}
       >
         + Add New Item

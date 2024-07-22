@@ -7,23 +7,26 @@ import {
   faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, useContext, useEffect, useState } from "react";
 import { UserInput } from "./UserInput";
 import { InvoiceItemInput } from "./InvoiceItemInput";
 import { InvoiceItemData } from "../Classes/InvoiceItemData";
 import { invoiceType } from "../Classes/InvoiceType";
 import { DatePicker } from "./SmallComponents/DatePicker";
 import { PaymentTerms } from "./SmallComponents/PaymentTerms";
-import { setConstantValue } from "typescript";
+import { moveSyntheticComments, setConstantValue } from "typescript";
 import { AddingInvoiceType } from "../Classes/AddingInvoiceType";
 import api from "../../api";
+import { MainContext } from "./MainPage";
 
 type AddingInvoiceProps = {
   setEditState: React.Dispatch<React.SetStateAction<boolean>>;
   invoice: invoiceType;
+  setClickedInvoice: Dispatch<invoiceType | null>;
 };
 
 export const EditingInvoice = (props: AddingInvoiceProps) => {
+  const {getInvoices} = useContext(MainContext) || {};
   //bill from info
   const [streetAddress, setStreetAddress] = useState<string>("");
   const [city, setCity] = useState<string>("");
@@ -65,6 +68,7 @@ export const EditingInvoice = (props: AddingInvoiceProps) => {
     setClientPostCode(props.invoice.clientAddress.postCode);
     setClientCountry(props.invoice.clientAddress.country);
     //invoice info
+    setTotal(props.invoice.total);
     setInvoiceDate(props.invoice.createdAt);
     setPaymentTerms(props.invoice.paymentTerms);
     setPaymentDue(props.invoice.paymentDue);
@@ -86,6 +90,27 @@ export const EditingInvoice = (props: AddingInvoiceProps) => {
 
     console.log(props.invoice)
   }, [props.invoice]);
+
+  const months = [
+    { days: 31, month: "Jan" },
+    { days: 28, month: "Feb" },
+    { days: 31, month: "Mar" },
+    { days: 30, month: "Apr" },
+    { days: 31, month: "May" },
+    { days: 30, month: "Jun" },
+    { days: 31, month: "Jul" },
+    { days: 31, month: "Aug" },
+    { days: 30, month: "Sep" },
+    { days: 31, month: "Oct" },
+    { days: 30, month: "Nov" },
+    { days: 31, month: "Dec" },
+  ]
+
+  useEffect(() => {
+    if (invoiceDateDay && invoiceDateMonth && invoiceDateYear) {
+      setInvoiceDate(`${invoiceDateDay}-${months[invoiceDateMonth].month}-${invoiceDateYear}`);
+    }
+  }, [invoiceDateDay, invoiceDateMonth, invoiceDateYear]);
 
   const onSaveChanges = () => {
     console.log(
@@ -143,7 +168,7 @@ export const EditingInvoice = (props: AddingInvoiceProps) => {
     api.put(`api/invoices/${props.invoice.id}/`, newInvoice).then((res) => {
       console.log(res.data);
       alert("Invoice updated successfully");
-      props.setEditState(false);
+      getInvoices && getInvoices().then(() => {props.setEditState(false); props.setClickedInvoice(null);})
     })
     .catch((error) => {
       console.log(error);
@@ -159,11 +184,11 @@ export const EditingInvoice = (props: AddingInvoiceProps) => {
   }
 
   return (
-    <div className="pt-[33px] px-[1.5rem] flex flex-col w-[100%] z-20 bg-white absolute rounded-r-2xl md:w-[80.2vw] xl:w-auto xl:left-0 xl:top-0 xl:right-[47.5rem]">
+    <div className="pt-[33px] px-[1.5rem] flex flex-col w-[100%] z-20 bg-white absolute rounded-r-2xl md:w-[80.2vw] xl:w-auto xl:left-0 xl:top-0 xl:right-[47.5rem] dark:bg-black1">
       <div className="flex flex-col w-[100%] px-[24px] md:px-[3.5rem]">
 
-        <p className="font-bold text-[24px] tracking-[-0.5px] mt-[1.625rem]">
-          Edit <span className="text-grey">#</span><span className=" text-black1">{props.invoice.id}</span>
+        <p className="font-bold text-[24px] tracking-[-0.5px] mt-[1.625rem] dark:text-white">
+          Edit <span className="text-grey">#</span><span className=" text-black1 dark:text-white">{props.invoice.id}</span>
         </p>
 
         <p className="text-purple mt-[1.375rem] font-bold tracking-[-0.25px] ">
@@ -235,12 +260,12 @@ export const EditingInvoice = (props: AddingInvoiceProps) => {
         />
       </div>
 
-      <div className="w-[100] h-[91px] pr-[1.5rem] flex justify-end items-center mt-[5.5rem] shadow-[0_-15px_30px_rgba(0,0,0,0.1)] mx-[-1.5rem]  md:shadow-none">
-        <button className="rounded-[4000px] py-[1rem] bg-[#F9FAFE] text-greyBlue font-bold text-[15px] tracking-[-0.25px] px-[1.5rem]" onClick ={() => {props.setEditState(false)}}>
+      <div className="w-[100] h-[91px] pr-[1.5rem] flex justify-end items-center mt-[5.5rem] shadow-[0_-15px_30px_rgba(0,0,0,0.1)] mx-[-1.5rem]  md:shadow-none hover:opacity-80">
+        <button className="rounded-[4000px] py-[1rem] bg-[#F9FAFE] text-greyBlue font-bold text-[15px] tracking-[-0.25px] px-[1.5rem] hover:opacity-80" onClick ={() => {props.setEditState(false)}}>
           Cancel
         </button>
         <button
-          className="rounded-[4000px] py-[1rem] bg-purple text-white font-bold text-[15px] tracking-[-0.25px] px-[1.5rem] ml-[1rem]"
+          className="rounded-[4000px] py-[1rem] bg-purple text-white font-bold text-[15px] tracking-[-0.25px] px-[1.5rem] ml-[1rem] hover:opacity-80"
           onClick={() => {
             onSaveChanges();
           }}

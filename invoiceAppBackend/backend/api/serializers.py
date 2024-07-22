@@ -13,21 +13,29 @@ class UserSerializer(serializers.ModelSerializer):
   def create(self, validated_data):
     user = User.objects.create_user(**validated_data)
     return user
-  
-class NoteSerializer(serializers.ModelSerializer):
-  class Meta:
-    model = Note
-    fields = ["id", "title", "content", "created_at", "author"]
-    extra_kwargs = {"author": {"read_only": True}}
 
 class AddressSerializer(serializers.ModelSerializer):
+    street = serializers.CharField(allow_blank=True, required=False)
+    city = serializers.CharField(allow_blank=True, required=False)
+    postCode = serializers.CharField(allow_blank=True, required=False)
+    country = serializers.CharField(allow_blank=True, required=False)
+
     class Meta:
         model = Address
         fields = ['street', 'city', 'postCode', 'country']
 
 class InvoiceSerializer(serializers.ModelSerializer):
-    senderAddress = AddressSerializer()
-    clientAddress = AddressSerializer()
+    senderAddress = AddressSerializer(required=False)
+    clientAddress = AddressSerializer(required=False)
+    paymentDue = serializers.CharField(allow_blank=True, required=False)
+    createdAt = serializers.CharField(allow_blank=True, required=False)
+    clientEmail = serializers.EmailField(allow_blank=True, required=False)
+    clientName = serializers.CharField(allow_blank=True, required=False)
+    description = serializers.CharField(allow_blank=True, required=False)
+    items = serializers.ListField(child=serializers.DictField(), required=False)
+    paymentTerms = serializers.IntegerField(required=False, default=0)
+    status = serializers.CharField(default='draft')
+    total = serializers.DecimalField(max_digits=10, decimal_places=2, required=False, default=0)
     
     class Meta:
         model = Invoice
@@ -79,8 +87,19 @@ class InvoiceSerializer(serializers.ModelSerializer):
         return instance
     
     def to_internal_value(self, data):
-        try:
-            return super().to_internal_value(data)
-        except serializers.ValidationError as exc:
-            print(exc.detail)  # Log the validation errors
-            raise exc
+      try:
+          print(data)
+          validated_data = super().to_internal_value(data)
+          
+
+          if 'status' in validated_data and validated_data['status'] != 'draft':
+            print("status", validated_data)
+            if 'paymentDue' in validated_data and not validated_data['paymentDue']:
+                raise serializers.ValidationError({'paymentDue': 'This field may not be blank.'})
+            if 'createdAt' in validated_data and not validated_data['createdAt']:
+                raise serializers.ValidationError({'createdAt': 'This field may not be blank.'})
+
+          return validated_data
+      except serializers.ValidationError as exc:
+          print(exc.detail)
+          raise exc

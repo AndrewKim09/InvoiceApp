@@ -10,10 +10,10 @@ export const InvoiceBar = (props: InvoiceBarProps) => {
   return (
     <div className="flex justify-between w-full mt-[36px] items-center h-auto md:mb-[2.4375rem] px-[1.5rem]">
       <div className="flex flex-col">
-        <span className="text-[24px] font-bold tracking-[-0.75px] h-[22px] leading-4 md:textLg md:h-[33px] ">
+        <span className="text-[24px] font-bold tracking-[-0.75px] h-[22px] leading-4 md:textLg md:h-[33px] dark:text-white">
           Invoices
         </span>
-        <span className="text-grey tracking-[-0.1px] font-medium h-[15px] leading-4 md:h-[15px] md:text-[13px] md:leading-[15px] md:tracking-[-0.1px] md:mt-[6px]">
+        <span className="text-grey tracking-[-0.1px] font-medium h-[15px] leading-4 md:h-[15px] md:text-[13px] md:leading-[15px] md:tracking-[-0.1px] md:mt-[6px] dark:text-light">
           <span className="hidden md:inline">There are </span>
           {props.numberOfInvoices}{" "}
           <span className="hidden md:inline">total</span> invoices

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext} from "react";
+import React, { useEffect, useState, createContext, Dispatch} from "react";
 import { NavBar } from "./NavBar";
 import { InvoiceBar } from "./InvoiceBar";
 import { Invoices } from "./Invoices";
@@ -9,7 +9,7 @@ import data from "../../assets/data.json";
 import api from "../../api";
 
 type MainContextType = {
-  getInvoices: Function
+  getInvoices: Function;
 }
 
 const MainContext = createContext<null | MainContextType>(null);
@@ -44,7 +44,6 @@ function App() {
 
   const getInvoices = async () => {
     api.get("api/invoices/").then((res) => {
-      console.log(res.data);
       setApiData(res.data);
     })
     .catch((error) => {
@@ -55,12 +54,16 @@ function App() {
   }
 
   useEffect(() => {
+    console.log(apiData);
+  }, [apiData]);
+
+  useEffect(() => {
     getInvoices();
   }, []);
 
   return (
     <MainProvider>
-    <div className="flex flex-col xl:flex-row min-h-[100vh] h-auto App ">
+    <div className="flex flex-col xl:flex-row min-h-[100vh] h-auto dark:bg-black1 App ">
       <NavBar toggleNightMode={toggleNightMode} darkMode={darkMode} />
       <div
         className={`w-[100%] h-[100%] grow xl:grow-0 xl:px-0 xl:w-[100%] xl:pt-[4.0625rem] xl:pb-[3.375rem] relative ${
